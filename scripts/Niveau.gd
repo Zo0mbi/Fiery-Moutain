@@ -1,19 +1,16 @@
 extends Node2D
 
-onready var plateform1 = preload("res://scenes/plateform/plateformIce.tscn")
-onready var plateform2 = preload("res://scenes/plateform/plateforme.tscn")
-onready var plateform3 = preload("res://scenes/plateform/plateforme2.tscn")
-var plateform = [plateform1,plateform2,plateform3]
+#Initialise
 onready var rngPlateform = [preload("res://scenes/plateform/plateformIce.tscn"),preload("res://scenes/plateform/plateforme.tscn"),preload("res://scenes/plateform/plateforme2.tscn"),preload("res://scenes/plateform/plateform_checkpoint.tscn")]
 onready var player = $Player
 
-#Va etre mis a 5 dans le Main
+#Va chercher les valeurs global.
 var niveaux = Global.niveau
 var nb_plateforme = Global.plateform
 var hauteur_plateforme=-2650
+
 # Called when the node enters the scene tree for the first time.
 #instancie et melange le rng pour la valeur X des plateformes
-
 func _ready():
 	_instancier_niveau()
 	randomize()
@@ -35,6 +32,7 @@ func _rngPlateform():
 	var plateforminstance = rand_range(0,2)
 	return plateforminstance
 
+
 func _instancierPlateforme(check):
 	var Xval = _valXplateform()
 	hauteur_plateforme = hauteur_plateforme+175
@@ -54,6 +52,11 @@ func _instancier_niveau():
 		_instancierPlateforme(false)
 	_instancierPlateforme(true)
 	
-	
-	
-
+# Reset les Param du jeux si le joueur perd toute ces vies.
+# Sinon reload la scene.
+func _Reset():
+	if Global.vie <=0:
+		Global._Reset()
+		queue_free()
+	else:
+		get_tree().reload_current_scene()

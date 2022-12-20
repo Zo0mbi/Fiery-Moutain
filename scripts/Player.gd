@@ -1,8 +1,10 @@
 extends KinematicBody2D
 
-export var speed = 130.0
+var vie = Global.vie
+export var speed = 145
 export var jump_speed = 300.0
 export var gravity = 240.0
+
 var screen_size;
 var velocity = Vector2()
 var jump_count = 0
@@ -29,7 +31,7 @@ func _triple_jump(delta):
 	if is_on_floor() && timer.is_stopped():
 		timer.start()
 	if jump_count >= 3:
-		jump_speed= 400
+		jump_speed = 400
 		self.rotate(deg2rad(360*delta))
 
 #prend les input du joueur et s'occupe des mouvement de celui-ci
@@ -57,3 +59,8 @@ func get_input():
 func _on_Combo_timeout():
 	jump_count = 0
 	jump_speed = 300
+
+func _Death():
+	Global.vie -= 1
+	get_parent()._Reset()
+		
